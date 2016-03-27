@@ -14,6 +14,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 public class SpellCheckerController {
 	
@@ -39,7 +42,7 @@ public class SpellCheckerController {
     private Button btnSpell;
 
     @FXML
-    private TextArea txtShow;
+    private TextFlow txtShow;
 
     @FXML
     private Label lblError;
@@ -52,7 +55,10 @@ public class SpellCheckerController {
     
     @FXML
     void doClear(ActionEvent event) {
-    	txtShow.setText("");
+    	int i=0;
+    	while(i!=txtShow.getChildren().size()){
+    		txtShow.getChildren().remove(i);
+    	}
     	txtInsert.setText("");
 		comboBox.setDisable(false);
 		lista.removeAll(lista);
@@ -81,7 +87,7 @@ public class SpellCheckerController {
     }
     
     public void calcolo(){
-    	String s1="";
+    	int j=0;
     	String[] s=txtInsert.getText().toLowerCase().replaceAll("[\\p{Punct}]","").split(" ");
 		for(int i=0;i<s.length;i++){
 			lista.add(s[i]);
@@ -89,17 +95,34 @@ public class SpellCheckerController {
     	long t0 = System.nanoTime();
     	if(comboBox.getValue()=="Italian"){
     		for(RichWord r:id.spellCheckText(lista)){
-			s1+=r.toString()+"\n";
-		}
+    			if(r.isCorretto()==false){
+    		        Text text1 = new Text(r.toString()+" ");
+    		        text1.setFill(Color.RED);
+    		    	txtShow.getChildren().add(text1);
+    				j++;
+    			}
+    			else{
+    				Text text1 = new Text(r.toString()+" ");
+    		    	txtShow.getChildren().add(text1);
+    			}
+    		}
 		}
     	else if(comboBox.getValue()=="English"){
     			for(RichWord r:ed.spellCheckText(lista)){
-    				s1+=r.toString()+"\n";
+    				if(r.isCorretto()==false){
+        		        Text text1 = new Text(r.toString()+" ");
+        		        text1.setFill(Color.RED);
+        		    	txtShow.getChildren().add(text1);
+        				j++;
+        			}
+        			else{
+        				Text text1 = new Text(r.toString()+" ");
+        		    	txtShow.getChildren().add(text1);
+        			}
     			}
     			}
     	long t1 = System.nanoTime();
-		txtShow.setText(s1);
-		if(id.spellCheckText(lista).size()==0 || ed.spellCheckText(lista).size()==0){
+		if(j==0){
 			lblError.setText("Your text don't contains errors!");
 		}
 		else

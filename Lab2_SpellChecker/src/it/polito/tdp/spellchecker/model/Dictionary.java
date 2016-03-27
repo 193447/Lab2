@@ -1,17 +1,20 @@
 package it.polito.tdp.spellchecker.model;
 
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Dictionary {
 	
-	protected List<String> termini=new LinkedList<String>();
-	private List<RichWord> paroleSbagliate=new LinkedList<RichWord>();
+	protected List<String> termini;
+	private List<RichWord> parole;
 
 
 	
 	public Dictionary() {
+		termini=new LinkedList<String>();
+		 parole=new LinkedList<RichWord>();
 	}
 
 
@@ -21,56 +24,64 @@ public class Dictionary {
 	
 	public List<RichWord> spellCheckText(List<String> inputTextList){
 		// ricerca con contains
-		/*for(int i = 0;i<inputTextList.size();i++){
+	/*	for(int i = 0;i<inputTextList.size();i++){
 			    RichWord rw=new RichWord(inputTextList.get(i),termini.contains(inputTextList.get(i)));
-			    if(termini.contains(inputTextList.get(i))==false)
-			    	paroleSbagliate.add(rw);
-			    */
-	    //ricerca dicotomica
-	    for(int j = 0;j<inputTextList.size();j++){
-		    RichWord rw=new RichWord(inputTextList.get(j),termini.contains(inputTextList.get(j)));
-	    	if(this.ricercaDicotominca(inputTextList.get(j),termini)==false)
-		    	paroleSbagliate.add(rw);
-	    	else{	
-	    	}
-			}
-		return paroleSbagliate;
-	}
-
-
-public boolean ricercaDicotominca(String parola,List<String> termini){
-    int i=termini.size()/2;
-    if(i==1){
-		if(termini.get(i).compareTo(parola)==0){
-			return true;
+			    parole.add(rw);
+			    }
+		return parole;
 		}
-		else
-	    	return false;
-
+		*/
+			    
+	    //ricerca dicotomica
+		Collections.sort(termini);
+	    for(int j = 0;j<inputTextList.size();j++){
+	    	RichWord rw=new RichWord(inputTextList.get(j),this.ricercaDicotominca(inputTextList.get(j),0,termini.size()-1));
+	    	parole.add(rw);
+			    }
+	    return parole;
 	}
-    else{
-    if(termini.get(i).compareTo(parola)==0){
-    	return true;
-    }
-	else if(termini.get(i).compareTo(parola)>0){
-		List<String> terminiTemp=new LinkedList<String>();
-		for(int k = 0;k<i;k++){
-			terminiTemp.add(termini.get(k));
-			}
-    	return ricercaDicotominca(parola,terminiTemp);
-    	}
-    
-	else if(termini.get(i).compareTo(parola)<0){
-		List<String> terminiTemp=new LinkedList<String>();
-		for(int k = i+1;k<termini.size();k++){
-			terminiTemp.add(termini.get(k));
-			}
-		return ricercaDicotominca(parola,terminiTemp);
-    		
+
+
+public boolean ricercaDicotominca(String parola,int a,int b){
+	
+	if(a<=b){
+	if(termini.get((a+b)/2).equals(parola)){
+		return true;
+	}
+	else {
+		if(termini.get((a+b)/2).compareTo(parola)>0)
+			return ricercaDicotominca(parola,a,((a+b)/2)-1);
+		if(termini.get((a+b)/2).compareTo(parola)<0)
+			return ricercaDicotominca(parola,((a+b)/2)+1,b);
+	}
+	
 }
+	return false;
 }
-	return true;
-}
+
+	
+		 		/*if(a<=b){
+					if(el.equals(termini.get((a+b)/2)))
+		 				return true;
+		 			if(el.compareTo(termini.get((a+b)/2))>0)
+		 				return ricercaDicotominca(el,1+(a+b)/2,b);
+		 			else
+		 				return ricercaDicotominca(el,a,(a+b)/2-1);
+		 		}
+		 		return false;
+	}
+	*/
 }
 	
+	
+	
+	
+	
+	
+	
+  
+ 
+	
+
+
 	
