@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import it.polito.tdp.spellchecker.model.EnglishDictionary;
 import it.polito.tdp.spellchecker.model.ItalianDictionary;
+import it.polito.tdp.spellchecker.model.ItalianDictionaryDAO;
 import it.polito.tdp.spellchecker.model.RichWord;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,6 +22,7 @@ import javafx.scene.text.TextFlow;
 public class SpellCheckerController {
 	
 	ItalianDictionary id=new ItalianDictionary();
+	ItalianDictionaryDAO idDAO=new ItalianDictionaryDAO();
 	EnglishDictionary ed=new EnglishDictionary();
 
 	List<String>lista=new LinkedList<String>();
@@ -62,7 +64,7 @@ public class SpellCheckerController {
     	txtInsert.setText("");
 		comboBox.setDisable(false);
 		lista.removeAll(lista);
-		id.spellCheckText(lista).removeAll(id.spellCheckText(lista));
+		idDAO.spellCheckText(lista).removeAll(idDAO.spellCheckText(lista));
 		ed.spellCheckText(lista).removeAll(ed.spellCheckText(lista));
 
     }
@@ -70,17 +72,19 @@ public class SpellCheckerController {
     @FXML
     void doSpell(ActionEvent event) {
     	if(comboBox.getValue()=="Italian"){
-    		id.loadDictionary();
+    		//id.loadDictionary();
+    		idDAO.loadDictionary();
     		this.calcolo();
-    		id.spellCheckText(lista).removeAll(id.spellCheckText(lista));
-    		ed.spellCheckText(lista).removeAll(ed.spellCheckText(lista));
-
+    		lista.removeAll(lista);
+    		idDAO.spellCheckText(lista).removeAll(idDAO.spellCheckText(lista));
     	}
     	else if(comboBox.getValue()=="English"){
     		ed.loadDictionary();
     		this.calcolo();
+    		lista.removeAll(lista);
     		ed.spellCheckText(lista).removeAll(ed.spellCheckText(lista));
-    		id.spellCheckText(lista).removeAll(id.spellCheckText(lista));
+
+        
     		}
     		
 
@@ -94,7 +98,8 @@ public class SpellCheckerController {
 		}
     	long t0 = System.nanoTime();
     	if(comboBox.getValue()=="Italian"){
-    		for(RichWord r:id.spellCheckText(lista)){
+    		for(RichWord r://id.spellCheckText(lista)
+    			idDAO.spellCheckText(lista)){
     			if(r.isCorretto()==false){
     		        Text text1 = new Text(r.toString()+" ");
     		        text1.setFill(Color.RED);
@@ -129,8 +134,8 @@ public class SpellCheckerController {
 			lblError.setText("Your text contains errors!");
 		lblTime.setText("Spell check completed in "+(double)((t1-t0)/1000000000.0)+" seconds");
 		comboBox.setDisable(true);
-    }
 
+    }
     @FXML
     void initialize() {
         assert comboBox != null : "fx:id=\"comboBox\" was not injected: check your FXML file 'SpellChecker.fxml'.";
