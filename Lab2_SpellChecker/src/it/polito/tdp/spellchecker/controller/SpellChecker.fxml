@@ -54,7 +54,7 @@
             </HBox>
             <HBox alignment="TOP_RIGHT">
                <children>
-                  <Label fx:id="lblError" text="Label">
+                  <Label fx:id="lblError">
                      <padding>
                         <Insets right="20.0" />
                      </padding>
@@ -65,7 +65,7 @@
                   <Button fx:id="btnClear" mnemonicParsing="false" onAction="#doClear" text="Clear Text" />
                </children>
             </HBox>
-            <Label fx:id="lblTime" text="Label" />
+            <Label fx:id="lblTime" />
          </children>
       </VBox>
    </center>

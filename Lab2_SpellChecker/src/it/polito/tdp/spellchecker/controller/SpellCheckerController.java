@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.spellchecker.model.EnglishDictionary;
-import it.polito.tdp.spellchecker.model.ItalianDictionary;
+//import it.polito.tdp.spellchecker.model.ItalianDictionary;
 import it.polito.tdp.spellchecker.model.ItalianDictionaryDAO;
 import it.polito.tdp.spellchecker.model.RichWord;
 import javafx.event.ActionEvent;
@@ -21,7 +21,7 @@ import javafx.scene.text.TextFlow;
 
 public class SpellCheckerController {
 	
-	ItalianDictionary id=new ItalianDictionary();
+	//ItalianDictionary id=new ItalianDictionary();
 	ItalianDictionaryDAO idDAO=new ItalianDictionaryDAO();
 	EnglishDictionary ed=new EnglishDictionary();
 
@@ -71,9 +71,13 @@ public class SpellCheckerController {
 
     @FXML
     void doSpell(ActionEvent event) {
+    	int i=0;
+		while(i!=txtShow.getChildren().size()){
+    		txtShow.getChildren().remove(i);
+    	}
     	if(comboBox.getValue()=="Italian"){
     		//id.loadDictionary();
-    		idDAO.loadDictionary();
+    		//idDAO.loadDictionary();
     		this.calcolo();
     		lista.removeAll(lista);
     		idDAO.spellCheckText(lista).removeAll(idDAO.spellCheckText(lista));
@@ -96,10 +100,9 @@ public class SpellCheckerController {
 		for(int i=0;i<s.length;i++){
 			lista.add(s[i]);
 		}
-    	long t0 = System.nanoTime();
+		long t0 = System.nanoTime();
     	if(comboBox.getValue()=="Italian"){
-    		for(RichWord r://id.spellCheckText(lista)
-    			idDAO.spellCheckText(lista)){
+    		for(RichWord r: /*id.spellCheckText(lista)*/idDAO.spellCheckText(lista)){
     			if(r.isCorretto()==false){
     		        Text text1 = new Text(r.toString()+" ");
     		        text1.setFill(Color.RED);
@@ -147,6 +150,8 @@ public class SpellCheckerController {
         assert lblTime != null : "fx:id=\"lblTime\" was not injected: check your FXML file 'SpellChecker.fxml'.";
         
         comboBox.getItems().addAll("Italian","English");
+        lblError.setText("");
+        lblTime.setText("");
 
 
     }

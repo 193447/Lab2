@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Collections;
+//import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class Dictionary {
 	}
 	
 	
-	public List<RichWord>/*Set<RichWord>*/ spellCheckText(List<String> inputTextList){
+	 public List<RichWord>/*Set<RichWord>*/ spellCheckText(List<String> inputTextList){
 		// ricerca con contains
 		/*for(int i = 0;i<inputTextList.size();i++){
 			    RichWord rw=new RichWord(inputTextList.get(i),termini.contains(inputTextList.get(i)));
@@ -43,7 +43,7 @@ public class Dictionary {
 		
 			    
 	    //ricerca dicotomica
-		Collections.sort(termini);
+/*		Collections.sort(termini);
 	    for(int j = 0;j<inputTextList.size();j++){
 	    	RichWord rw=new RichWord(inputTextList.get(j),this.ricercaDicotominca(inputTextList.get(j),0,termini.size()-1));
 	    	parole.add(rw);
@@ -51,27 +51,26 @@ public class Dictionary {
 	    return parole;
 	} 
 
-       public boolean ricercaDicotominca(String parola,int a,int b){
-    	   if(a<=b){
-    		   if(termini.get((a+b)/2).equals(parola)){
-    			   return true;
-    			   }
-    		   else {
-    			   if(termini.get((a+b)/2).compareTo(parola)>0)
-    				   return ricercaDicotominca(parola,a,((a+b)/2)-1);
-    			   if(termini.get((a+b)/2).compareTo(parola)<0)
-    				   return ricercaDicotominca(parola,((a+b)/2)+1,b);
-    			   }
-    		   }
-    	   return false;
-    	   }
-}
-       
-       
-  
-  // 	public List<RichWord>/*Set<RichWord>*/ spellCheckText(List<String> inputTextList){
-
-  /*       //ricerca  su database
+	 public boolean ricercaDicotominca(String parola,int a,int b){
+			
+			if(a<=b){
+			if(termini.get((a+b)/2).equals(parola)){
+				return true;
+			}
+			else {
+				if(termini.get((a+b)/2).compareTo(parola)>0)
+					return ricercaDicotominca(parola,a,((a+b)/2)-1);
+				if(termini.get((a+b)/2).compareTo(parola)<0)
+					return ricercaDicotominca(parola,((a+b)/2)+1,b);
+			}
+			
+		}
+			return false;
+		} */
+	 
+	 
+	 
+	 //ricerca dicotomica su database
 	    for(int j = 0;j<inputTextList.size();j++){
 	    	RichWord rw=new RichWord(inputTextList.get(j),this.ricercaDB(inputTextList.get(j)));
 	    	parole.add(rw);
@@ -81,9 +80,36 @@ public class Dictionary {
 
 
 	private boolean ricercaDB(String termine) {
-	
+		boolean flag=false;
+		try {
+
+			String jdbcURL = "jdbc:mysql://localhost/dizionario?user=root&password=";
+			
+			Connection conn = DriverManager.getConnection(jdbcURL);
+
+			Statement st = conn.createStatement();
+
+			String sql = "select nome from parola";
+
+			ResultSet res = st.executeQuery(sql);
+			
+			while(res.next()){
+				String nome = res.getString("nome");
+				if(nome.compareTo(termine)==0)
+					flag= true;
+			}
+			res.close();
+			conn.close();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			}
+		return flag;
+	}
 }
-*/	
+       
+	
 	
 	
 	

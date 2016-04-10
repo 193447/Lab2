@@ -15,7 +15,7 @@ public class ItalianDictionaryDAO extends Dictionary{
 	public void loadDictionary(){
 		try {
 			
-			String jdbcURL = "jdbc:mysql://localhost/dizionario?user=root&password=";
+			String jdbcURL= "jdbc:mysql://localhost/dizionario?user=root&password=";
 
 			Connection conn = DriverManager.getConnection(jdbcURL);
 
@@ -25,8 +25,9 @@ public class ItalianDictionaryDAO extends Dictionary{
 
 			ResultSet res = st.executeQuery(sql);
 
-			super.termini.add(res.getString("nome"));
-			
+			while(res.next()){
+				super.termini.add(res.getString("nome"));
+			}			
 			res.close();
 			conn.close();			
 
